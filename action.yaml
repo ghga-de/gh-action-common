@@ -1,0 +1,38 @@
+name: 'GHGA microservice common action tasks'
+description: 'Common tasks that are executed in multiple GH action workflows for GHGA microservices'
+outputs:
+  PACKAGE_NAME:
+    description: "Name of the microservice package"
+    value: ${{ steps.runtime_variables.outputs.PACKAGE_NAME }}
+  MAIN_SRC_DIR:
+    description: "The main src directory of the microservice package"
+    value: ${{ steps.runtime_variables.outputs.MAIN_SRC_DIR }}
+  CONFIG_YAML_ENV_VAR_NAME:
+    description: "The name of the environment variable pointing to the config yaml file"
+    value: ${{ steps.runtime_variables.outputs.CONFIG_YAML_ENV_VAR_NAME }}
+  CONFIG_YAML:
+    description: "The config YAML file"
+    value: ${{ steps.runtime_variables.outputs.CONFIG_YAML }}
+runs:
+  using: "composite"
+  steps:
+      - name: Get/export important runtime variables
+        id: runtime_variables
+        run: |
+          PACKAGE_NAME="$(./scripts/get_package_name.py)"
+          MAIN_SRC_DIR="${PWD}/${PACKAGE_NAME}"
+          CONFIG_YAML_ENV_VAR_NAME="$( echo ${PACKAGE_NAME^^} | sed "s/-/_/g" )_CONFIG_YAML"
+          CONFIG_YAML="${PWD}/.devcontainer/.dev_config.yaml"
+          # attach all other variables to the step's output:
+          echo "::set-output name=PACKAGE_NAME::${PACKAGE_NAME}"
+          echo "::set-output name=MAIN_SRC_DIR::${MAIN_SRC_DIR}"
+          echo "::set-output name=CONFIG_YAML_ENV_VAR_NAME::${CONFIG_YAML_ENV_VAR_NAME}"
+          echo "::set-output name=CONFIG_YAML::${CONFIG_YAML}"
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install Dependencies
+        run: |
+          pip install ".[all]"
