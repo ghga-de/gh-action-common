@@ -18,6 +18,7 @@ runs:
   steps:
       - name: Get/export important runtime variables
         id: runtime_variables
+        shell: bash
         run: |
           PACKAGE_NAME="$(./scripts/get_package_name.py)"
           MAIN_SRC_DIR="${PWD}/${PACKAGE_NAME}"
@@ -34,5 +35,6 @@ runs:
           python-version: 3.9
 
       - name: Install Dependencies
+        shell: bash
         run: |
           pip install ".[all]"
