@@ -1,4 +1,4 @@
-# Copyright 2022 Universität Tübingen, DKFZ and EMBL
+# Copyright 2022-2023 Universität Tübingen, DKFZ and EMBL
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,12 +40,12 @@ runs:
           CONFIG_YAML_ENV_VAR_NAME="$( echo ${PACKAGE_NAME^^} | sed "s/-/_/g" )_CONFIG_YAML"
           CONFIG_YAML="${PWD}/.devcontainer/.dev_config.yaml"
           # attach all other variables to the step's output:
-          echo "::set-output name=PACKAGE_NAME::${PACKAGE_NAME}"
-          echo "::set-output name=MAIN_SRC_DIR::${MAIN_SRC_DIR}"
-          echo "::set-output name=CONFIG_YAML_ENV_VAR_NAME::${CONFIG_YAML_ENV_VAR_NAME}"
-          echo "::set-output name=CONFIG_YAML::${CONFIG_YAML}"
+          echo "PACKAGE_NAME=${PACKAGE_NAME}" >> $GITHUB_OUTPUT
+          echo "MAIN_SRC_DIR=${MAIN_SRC_DIR}" >> $GITHUB_OUTPUT
+          echo "CONFIG_YAML_ENV_VAR_NAME=${CONFIG_YAML_ENV_VAR_NAME}" >> $GITHUB_OUTPUT
+          echo "CONFIG_YAML=${CONFIG_YAML}" >> $GITHUB_OUTPUT
       - name: Set up Python 3.9
-        uses: actions/setup-python@v3.1.2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.9
 
