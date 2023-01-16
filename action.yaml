@@ -1,4 +1,4 @@
-# Copyright 2022 Universität Tübingen, DKFZ and EMBL
+# Copyright 2022-2023 Universität Tübingen, DKFZ and EMBL
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,7 +45,7 @@ runs:
           echo "::set-output name=CONFIG_YAML_ENV_VAR_NAME::${CONFIG_YAML_ENV_VAR_NAME}"
           echo "::set-output name=CONFIG_YAML::${CONFIG_YAML}"
       - name: Set up Python 3.9
-        uses: actions/setup-python@v3.1.2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.9
 
