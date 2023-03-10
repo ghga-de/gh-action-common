@@ -4,7 +4,7 @@ This GitHub Action encapsulates common steps that are executed in GitHub Action 
 
 ```
 - id: common
-  uses: ghga-de/gh-action-common@v1
+  uses: ghga-de/gh-action-common@v2
 ```
 
 The action outputs the following values:

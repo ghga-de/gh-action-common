@@ -52,4 +52,4 @@ runs:
       - name: Install Dependencies
         shell: bash
         run: |
-          pip install ".[all]"
+          pip install -r requirements.txt -r requirements-dev.txt
