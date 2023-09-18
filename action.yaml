@@ -49,6 +49,10 @@ runs:
         with:
           python-version: 3.9
 
+# The pip install should use --no-deps to prevent it from trying to install package dependencies:
+# The canonical set of dependencies to install for a given service should come from 
+# the lock files and the lock files only. If pip does look at package dependencies when 
+# installing a given package (like FastAPI), there is a potential for false conflicts to arise.
       - name: Install Dependencies
         shell: bash
         run: |
