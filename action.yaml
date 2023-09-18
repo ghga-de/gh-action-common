@@ -36,7 +36,7 @@ runs:
         shell: bash
         run: |
           PACKAGE_NAME="$(./scripts/get_package_name.py)"
-          MAIN_SRC_DIR="${PWD}/${PACKAGE_NAME}"
+          MAIN_SRC_DIR="${PWD}/src/${PACKAGE_NAME}"
           CONFIG_YAML_ENV_VAR_NAME="$( echo ${PACKAGE_NAME^^} | sed "s/-/_/g" )_CONFIG_YAML"
           CONFIG_YAML="${PWD}/.devcontainer/.dev_config.yaml"
           # attach all other variables to the step's output:
@@ -49,7 +49,11 @@ runs:
         with:
           python-version: 3.9
 
+# The pip install should use --no-deps to prevent it from trying to install package dependencies:
+# The canonical set of dependencies to install for a given service should come from 
+# the lock files and the lock files only. If pip does look at package dependencies when 
+# installing a given package (like FastAPI), there is a potential for false conflicts to arise.
       - name: Install Dependencies
         shell: bash
         run: |
-          pip install -r requirements.txt -r requirements-dev.txt
+          pip install --no-deps -r requirements-dev.txt
