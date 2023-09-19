@@ -57,3 +57,4 @@ runs:
         shell: bash
         run: |
           pip install --no-deps -r requirements-dev.txt
+          pip install --no-deps .
