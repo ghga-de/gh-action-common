@@ -56,5 +56,5 @@ runs:
       - name: Install Dependencies
         shell: bash
         run: |
-          pip install --no-deps -r requirements-dev.txt
+          pip install --no-deps -r ./lock/requirements-dev.txt
           pip install --no-deps .
