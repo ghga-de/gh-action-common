@@ -41,5 +41,3 @@ This action will now only work with an exhaustive `requirements-dev.txt` file. I
 ### v2
 
 Uses a requirement file for dev requirements instead of relying on the "all" extra.
-
-
