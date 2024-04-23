@@ -6,12 +6,12 @@ This GitHub Action encapsulates common steps that are executed in GitHub Action 
 
 ```
 - id: ghga-common
-  uses: ghga-de/gh-action-common@v5
+  uses: ghga-de/gh-action-common@v6
   with:
     python-version: '3.12'
 ```
 
-If the `with` block is omitted, the default Python version for the GHGA repositories will be used, which is currently Python 3.9.
+If the `with` block is omitted, the default Python version for the GHGA repositories will be used, which is currently Python 3.12.
 
 ## Output
 
