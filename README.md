@@ -26,6 +26,10 @@ The action outputs the following values:
 
 ## Changelog
 
+### v6
+
+Use Python 3.12 instead of Python 3.9 as the default version.
+
 ### v5
 
 Allows specifying the Python version in the `with` block.
