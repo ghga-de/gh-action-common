@@ -1,0 +1,82 @@
+name: CI on workflow call
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        type: string
+        required: true
+      package_version:
+        type: string
+        required: false
+
+jobs:
+  verify_version:
+    if: contains(fromJSON('["release"]'), github.event_name)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: Check out code
+
+      - uses: actions/setup-python@v4
+        name: Set up Python 3.9
+        with:
+          python-version: "3.9"
+      
+      - name: Ensure that tag complies with semantic versioning.
+        uses: matt-usurp/validate-semver@v1
+        with:
+          version: ${{ inputs.tag }}
+
+      - name: Ensure package version and tag are equal
+        run: |
+          PKG_VER="$(python setup.py --version)"
+          TAG_VER=${{ inputs.package_version }}
+          [[ -z "$TAG_VER" ]] && TAG_VER=${{ inputs.tag }}
+          
+          echo "Package version is $PKG_VER" >&2
+          echo "Tag version is $TAG_VER" >&2
+
+          if [ "$PKG_VER" != "$TAG_VER" ]; then
+            echo "Package version and tag name mismatch." >&2
+            exit 1
+          fi
+
+  push_to_docker_hub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: Check out code
+
+      - uses: docker/setup-qemu-action@v2
+        name: Set up QEMU
+
+      - uses: docker/setup-buildx-action@v2
+        name: Set up Docker Buildx
+
+      - uses: docker/login-action@v2
+        name: Login to DockerHub
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v4
+        name: Build and push
+        id: docker_build
+        with:
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: "ghga/${{ github.event.repository.name }}:${{ inputs.tag }}"
+
+      - name: Run Trivy vulnerability scanner 
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: "docker.io/ghga/${{ github.event.repository.name }}:${{ inputs.tag }}"
+          format: "table"
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: "os,library"
+          severity: "CRITICAL,HIGH"
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
