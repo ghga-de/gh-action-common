@@ -47,7 +47,7 @@ runs:
         run: |
           PACKAGE_NAME="$(./scripts/get_package_name.py)"
           MAIN_SRC_DIR="${PWD}/src/${PACKAGE_NAME}"
-          CONFIG_YAML_ENV_VAR_NAME="$( echo $PACKAGE_NAME | tr 'a-z' 'A-Z' | sed "s/-/_/g" )_CONFIG_YAML"
+          CONFIG_YAML_ENV_VAR_NAME="$( echo ${PACKAGE_NAME} | tr 'a-z' 'A-Z' | sed "s/-/_/g" )_CONFIG_YAML"
           CONFIG_YAML="${PWD}/.devcontainer/.dev_config.yaml"
           # attach all other variables to the step's output:
           echo "PACKAGE_NAME=${PACKAGE_NAME}" >> $GITHUB_OUTPUT
