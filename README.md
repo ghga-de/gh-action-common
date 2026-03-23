@@ -26,6 +26,10 @@ The action outputs the following values:
 
 ## Changelog
 
+### v7
+
+Update actions to use versions running on Node.js >= 24.
+
 ### v6
 
 Use Python 3.12 instead of Python 3.9 as the default version.
